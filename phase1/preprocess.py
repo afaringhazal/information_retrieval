@@ -6,7 +6,9 @@ import pickle
 import string
 
 stop_words = stopwords_list()
-# punctuation = ['.','/',',','[',']',':','"','<','>','\\','!','@','#','$','%','^','&','*','(',')','-','+','=','\'','_','،' ,'!!' , ]
+punctuation = ['.','/',',','[',']',':','"','<','>','\\','!','@','#','$','%','^','&','*','(',')','-','+','=','\'','_','،' ,'!!' ,
+               '!!','!>','!»', '?!','!؟','".','",','")','"(','%)',')-',').','):','):-','),',')،','»']
+
 
 def tokenize(doc_string):
     """
@@ -178,7 +180,8 @@ def preprocessing_phase2():
             term.word = stem_v2(term.word)
             if not term.word == '':
                 if term.word not in string.punctuation:
-                    terms.append(term)
+                    if term.word not in punctuation:
+                        terms.append(term)
             number_of_position += len(token)
         number_of_doc += 1
     print("finish tokenizer and normalizer ,stemming , del stop word")
@@ -188,4 +191,4 @@ def preprocessing_phase2():
     return terms
 
 
-preprocessing_phase2()
+# preprocessing_phase2()
