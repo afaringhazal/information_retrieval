@@ -3,9 +3,10 @@ from parsivar import Tokenizer, Normalizer, FindStems
 from hazm import stopwords_list, Stemmer
 from typing import List, Dict
 import pickle
+import string
 
 stop_words = stopwords_list()
-
+# punctuation = ['.','/',',','[',']',':','"','<','>','\\','!','@','#','$','%','^','&','*','(',')','-','+','=','\'','_','،' ,'!!' , ]
 
 def tokenize(doc_string):
     """
@@ -141,6 +142,7 @@ class Information:
 
 # token sequence
 
+# word_to_doc_id_to_position
 
 def preprocessing_phase2():
     """
@@ -174,7 +176,9 @@ def preprocessing_phase2():
                 number_of_position += len(token)
                 continue
             term.word = stem_v2(term.word)
-            terms.append(term)
+            if not term.word == '':
+                if term.word not in string.punctuation:
+                    terms.append(term)
             number_of_position += len(token)
         number_of_doc += 1
     print("finish tokenizer and normalizer ,stemming , del stop word")
