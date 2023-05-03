@@ -1,29 +1,31 @@
 import pickle
-from typing import List
-from preprocess import Term
+from preprocess import Information, Document , Term
+from typing import Dict, List, Set
 
 
-def my_function(val: Term):
-    """
-    list.sort() has a key parameter to specify a function (or other callable)
-    to be called on each list element prior to making comparisons
-    :param val: term
-    :return: word of the term
-    """
-    return val.word
+id_to_posting_dict: Dict[str, List[Document]] = dict()
 
 
-def sort_by_term(terms: List[Term]):
-    """
-    in this method sort by term and doc_id because a sorting algorithm is stable
-    :param terms: a list of term that sorted by doc_id
-    :return: a list of term that sorted by term and doc_id
-    """
-    terms.sort(key=my_function)
-    print("finish sort")
-    with open('sort_file', 'wb') as fpp:
-        pickle.dump(terms, fpp)
+def convert_to_dictionary(terms: List[Term]):
+    for term in terms:
+        word = term.word
+        doc_id = term.doc_id
+        pos = term.position
+
+        posting_dict = id_to_posting_dict.get(word)
+        if posting_dict is None:
+            id_to_posting_dict[word] = [Document(doc_id, [pos])]
+        else:
+            last_document = posting_dict[-1]
+            if last_document is not None:
+                if last_document.doc_id == doc_id:
+                    last_document.add_position(pos)
+                else:
+                    posting_dict.append(Document(doc_id, [pos]))
 
 
-term = pickle.load(open("listfile", "rb"))
-sort_by_term(term)
+terms_ = pickle.load(open("sort_file", "rb"))
+convert_to_dictionary(terms_)
+print("finish convert")
+with open('inverted_index', 'wb') as fpp:
+    pickle.dump(id_to_posting_dict, fpp)
