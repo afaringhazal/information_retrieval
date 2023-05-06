@@ -65,8 +65,8 @@ def stop_word(words):
     return new_list
 
 
-def stop_word_v2(term):
-    if term.word in stop_words:
+def stop_word_v2(word):
+    if word in stop_words:
         return True
     return False
 
@@ -174,7 +174,7 @@ def preprocessing_phase2():
         number_of_position = 0
         for token in token_list:
             term = Term(number_of_doc, token, number_of_position)
-            if stop_word_v2(term):
+            if stop_word_v2(term.word):
                 number_of_position += len(token)
                 continue
             term.word = stem_v2(term.word)
