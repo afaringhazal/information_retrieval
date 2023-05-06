@@ -3,8 +3,11 @@ from parsivar import Tokenizer, Normalizer, FindStems
 from hazm import stopwords_list, Stemmer
 from typing import List, Dict
 import pickle
+import string
 
 stop_words = stopwords_list()
+punctuation = ['.','/',',','[',']',':','"','<','>','\\','!','@','#','$','%','^','&','*','(',')','-','+','=','\'','_','،' ,'!!' ,
+               '!!','!>','!»', '?!','!؟','".','",','")','"(','%)',')-',').','):','):-','),',')،','»']
 
 
 def tokenize(doc_string):
@@ -62,8 +65,8 @@ def stop_word(words):
     return new_list
 
 
-def stop_word_v2(term):
-    if term.word in stop_words:
+def stop_word_v2(word):
+    if word in stop_words:
         return True
     return False
 
@@ -141,6 +144,7 @@ class Information:
 
 # token sequence
 
+# word_to_doc_id_to_position
 
 def preprocessing_phase2():
     """
@@ -170,11 +174,14 @@ def preprocessing_phase2():
         number_of_position = 0
         for token in token_list:
             term = Term(number_of_doc, token, number_of_position)
-            if stop_word_v2(term):
+            if stop_word_v2(term.word):
                 number_of_position += len(token)
                 continue
             term.word = stem_v2(term.word)
-            terms.append(term)
+            if not term.word == '':
+                if term.word not in string.punctuation:
+                    if term.word not in punctuation:
+                        terms.append(term)
             number_of_position += len(token)
         number_of_doc += 1
     print("finish tokenizer and normalizer ,stemming , del stop word")
@@ -184,4 +191,4 @@ def preprocessing_phase2():
     return terms
 
 
-preprocessing_phase2()
+# preprocessing_phase2()
