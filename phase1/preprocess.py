@@ -134,6 +134,9 @@ class Document:
     def tf(self):
         return 1+math.log(len(self.positions))
 
+    def __lt__(self, other):
+        return self.tf > other.tf
+
 
 class Information:
     def __init__(self, letter, frequency=1):
