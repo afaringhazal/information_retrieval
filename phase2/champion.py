@@ -29,9 +29,9 @@ def champion():
             new_list_of_postings = [heapq.heappop(posting_list) for i in range(len(posting_list))]
         sort_by_doc_id(new_list_of_postings)
         champion_id_to_postings[word] = new_list_of_postings
-    print("finish champion")
-    with open('champion', 'wb') as fpp:
-        pickle.dump(champion, fpp)
+    print("finish champion_")
+    with open('champion_', 'wb') as fpp:
+        pickle.dump(champion_id_to_postings, fpp)
 
 
 champion()
