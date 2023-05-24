@@ -2,10 +2,13 @@ import pickle
 from typing import Dict, List, Set
 import json
 import logging
+
+import nltk
+
 from phase1.preprocess import Document, tokenize, stem_v2, normalize, stop_word_v2
 
 id_to_posting_dict: Dict[str, List[Document]] = dict()
-# id_to_posting_dict = pickle.load(open("../phase1/inverted_index", "rb"))
+id_to_posting_dict = pickle.load(open("../phase1/inverted_index", "rb"))
 
 # phase 3
 
@@ -309,22 +312,30 @@ def intersect_not(not_in_postings: List[Answer], in_postings: List[Answer]):
     return answers
 
 
-# val_user = input("Enter your value : ")
-# query_list_user = process_query(val_user)
-# sort_query_list_by_action(query_list_user)
-# answer_user = create_answer(query_list=query_list_user)
-# list_answer_usr = list(answer_user)
-# sort_total_answer_by_rank(list_answer_usr)
-# complete_result()
-# max_ = 5
-# for ans in list_answer_usr:
-#     if max_ == 0:
-#         break
-#     print(doc_id_to_title_and_url[str(ans.doc_id)]['title'])
-#     print(doc_id_to_title_and_url[str(ans.doc_id)]['url'])
-#     print(doc_id_to_title_and_url[str(ans.doc_id)]['content'])
-#     print(ans.doc_id)
-#     print(ans.positions)
-#     print(ans.rank)
-#     print("-----------------")
-#     max_ -= 1
+val_user = input("Enter your value : ")
+query_list_user = process_query(val_user)
+sort_query_list_by_action(query_list_user)
+answer_user = create_answer(query_list=query_list_user)
+list_answer_usr = list(answer_user)
+sort_total_answer_by_rank(list_answer_usr)
+complete_result()
+max_ = 5
+for ans in list_answer_usr:
+    if max_ == 0:
+        break
+    print(doc_id_to_title_and_url[str(ans.doc_id)]['title'])
+    print(doc_id_to_title_and_url[str(ans.doc_id)]['url'])
+    content_ = doc_id_to_title_and_url[str(ans.doc_id)]['content']
+    sentences = nltk.sent_tokenize(content_)
+    for sentence in sentences:
+        for q in query_list_user:
+            if q.word in sentence:
+                print(sentence)
+                print("********************")
+    print("--------------------------------------")
+    # print(doc_id_to_title_and_url[str(ans.doc_id)]['content'])
+    print(ans.doc_id)
+    print(ans.positions)
+    print(ans.rank)
+    print("-----------------")
+    max_ -= 1

@@ -8,7 +8,7 @@ import nltk
 # nltk.download('punkt')
 from phase1.preprocess import Document
 from phase1.process_query import process_query, Query
-query_ = "باشگاه"
+query_ = "باشگاه های پرسپولیس"
 query_list_ = process_query(query=query_)
 print(query_list_)
 
@@ -193,15 +193,12 @@ for document, score_ in answer_of_documents_:
     print("title :")
     print(doc_id_to_title_and_url_and_content[str(document.doc_id)]['title'])
     content_ =doc_id_to_title_and_url_and_content[str(document.doc_id)]['content']
-    # sentences = re.split(r'(?<=[^A-Z].[.?]) +(?=[A-Z])', content_)
     sentences = nltk.sent_tokenize(content_)
-    # context_sentences = []
     for sentence in sentences:
-        if any(word in sentence for word in query_):
-            print(sentence)
-            print("********************")
-            # context_sentences.append(sentence)
-    # print(context_sentences)
+        for q in query_list_:
+            if q.word in sentence:
+                print(sentence)
+                print("********************")
     print("--------------------------------------")
     Number_of_answer -= 1
     if Number_of_answer == 0:
