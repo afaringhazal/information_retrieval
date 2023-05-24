@@ -132,7 +132,7 @@ class Document:
 
     @property
     def tf(self):
-        return 1+math.log(len(self.positions))
+        return 1 + math.log(len(self.positions))
 
     def __lt__(self, other):
         return self.tf > other.tf
