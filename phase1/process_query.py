@@ -2,10 +2,13 @@ import pickle
 from typing import Dict, List, Set
 import json
 import logging
+
+import nltk
+
 from phase1.preprocess import Document, tokenize, stem_v2, normalize, stop_word_v2
 
 id_to_posting_dict: Dict[str, List[Document]] = dict()
-id_to_posting_dict = pickle.load(open("inverted_index", "rb"))
+id_to_posting_dict = pickle.load(open("../phase1/inverted_index", "rb"))
 
 # phase 3
 
@@ -88,6 +91,21 @@ class Query:
 
     def add_action(self, action):
         self.actions.append(action)
+    @property
+    def get_idf(self):
+        return self.actions[0]
+
+    def __eq__(self, other):
+        return self.word == other.word
+    def __hash__(self):
+        return 1
+
+    def __str__(self):
+        return "word : " + self.word
+
+    def __repr__(self):
+        return "word : " + self.word
+
 
 
 def process_query(query):
@@ -307,7 +325,15 @@ for ans in list_answer_usr:
         break
     print(doc_id_to_title_and_url[str(ans.doc_id)]['title'])
     print(doc_id_to_title_and_url[str(ans.doc_id)]['url'])
-    print(doc_id_to_title_and_url[str(ans.doc_id)]['content'])
+    content_ = doc_id_to_title_and_url[str(ans.doc_id)]['content']
+    sentences = nltk.sent_tokenize(content_)
+    for sentence in sentences:
+        for q in query_list_user:
+            if q.word in sentence:
+                print(sentence)
+                print("********************")
+    print("--------------------------------------")
+    # print(doc_id_to_title_and_url[str(ans.doc_id)]['content'])
     print(ans.doc_id)
     print(ans.positions)
     print(ans.rank)

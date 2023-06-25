@@ -1,4 +1,6 @@
 import json
+import math
+
 from parsivar import Tokenizer, Normalizer, FindStems
 from hazm import stopwords_list, Stemmer
 from typing import List, Dict
@@ -127,6 +129,13 @@ class Document:
     @property
     def pos_fre(self):
         return len(self.positions)
+
+    @property
+    def tf(self):
+        return 1 + math.log(len(self.positions))
+
+    def __lt__(self, other):
+        return self.tf > other.tf
 
 
 class Information:
